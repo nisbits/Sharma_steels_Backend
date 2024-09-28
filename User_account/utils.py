@@ -1,12 +1,13 @@
 import requests
+import os 
+api_key =os.environ.get('2factor_API_key')
 
-api_key ="59ea4a40-7bbf-11ef-8b17-0200cd936042"
 def send_sms(phone_number): 
     url = f"https://2factor.in/API/V1/{api_key}/SMS/{phone_number}/AUTOGEN2/OTP1"
 
     payload={}
     headers = {}
-
+ 
     response = requests.request("GET", url, headers=headers, data=payload)
  
     print(response.text)
