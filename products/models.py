@@ -2,7 +2,7 @@ from django.db import models
 
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True)
-    category = models.CharField(max_length=255)
+    category = models.CharField(max_length=255)      # Category of the product
     brand_name = models.CharField(max_length=255)
     specification = models.TextField()
     mrp = models.DecimalField(max_digits=10, decimal_places=2)

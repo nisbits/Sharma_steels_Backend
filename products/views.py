@@ -11,7 +11,7 @@ from rest_framework import status
 # @authentication_classes([JWTAuthentication])
 # @permission_classes([IsAuthenticated])
 def product_listing_home_page(request):
-    products = Product.objects.all()
+    products = Product.objects.all().order_by('?')
     serializer = ProductListingSerializer(products, many=True)
     return Response({"products":serializer.data},status=status.HTTP_200_OK)
 
@@ -34,3 +34,4 @@ def product_catagory(request):
     additionals=['Stone Chips','Bricks','Paints','Cover Blocks','Chemicals']
     unique_catagories.extend(additionals)
     return Response({"catagories":unique_catagories},status=status.HTTP_200_OK)
+

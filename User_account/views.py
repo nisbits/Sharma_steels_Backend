@@ -63,3 +63,34 @@ def register_user(request):
                 return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
             return Response({'message': 'User registered successfully!'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+from rest_framework_simplejwt.tokens import RefreshToken
+@api_view(['POST'])
+def login_view(request):
+    phone_no = request.data.get('phone_no')
+    password = request.data.get('password')
+
+    # Authenticate user
+    user = authenticate(username=phone_no, password=password)
+
+    if user is not None:
+        try:
+            # Get the profile associated with the user
+            profile = UserProfile.objects.get(user=user)
+
+            # Check if the admin has approved the account
+            if not profile.admin_approved:
+                return Response({'detail': 'Your account is not yet approved by the admin.'}, status=status.HTTP_403_FORBIDDEN)
+
+            # Generate JWT tokens if user is admin-approved
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            })
+
+        except UserProfile.DoesNotExist:
+            return Response({'detail': 'Profile not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    else:
+        return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
