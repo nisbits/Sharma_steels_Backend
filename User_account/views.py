@@ -3,11 +3,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import RegistrationSerializer
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate 
 # Create your views here.
 from .utils import *
 from .models import User, UserProfile
-
+from rest_framework_simplejwt.tokens import RefreshToken
 @api_view(['POST'])
 def send_otp(request):
     phone_no=request.data.get('phone_no')
@@ -84,6 +84,9 @@ def login_view(request):
 
             # Generate JWT tokens if user is admin-approved
             refresh = RefreshToken.for_user(user)
+            refresh['username'] = user.username
+            refresh['first_name'] = user.first_name
+            refresh['last_name'] = user.last_name
             return Response({
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
