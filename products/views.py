@@ -35,3 +35,14 @@ def product_catagory(request):
     # print(serializer.data)  
     return Response({"catagories":serializer.data},status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+# @authentication_classes([JWTAuthentication])
+# @permission_classes([IsAuthenticated])
+def product_details(request,product_id):
+    try:
+        product = Product.objects.get(product_id=product_id)
+    except Product.DoesNotExist:
+        return Response({"message":"Product not found"},status=status.HTTP_404_NOT_FOUND)
+    serializer = productDetailsSerializer(product)
+    return Response({"product":serializer.data},status=status.HTTP_200_OK)
+

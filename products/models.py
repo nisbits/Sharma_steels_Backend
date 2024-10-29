@@ -42,7 +42,7 @@ class ProductImage(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Additional Image for {self.product.product_name}"
+        return f"Additional Image for {self.product}"
     
 class ExtraCharge(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="extra_charges")
