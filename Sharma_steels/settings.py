@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "User_account",
+    "cart",
     "products",
     "rest_framework",
     "corsheaders",
@@ -88,14 +89,14 @@ WSGI_APPLICATION = "Sharma_steels.wsgi.application"
 #     }
 # }
 
-DATABASES = {
-   'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Sharma_steels',
-        'USER':'postgres',
-        'PASSWORD':'1234',
-        'HOST':'localhost'
-}}
+# DATABASES = {
+#    'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'Sharma_steels',
+#         'USER':'postgres',
+#         'PASSWORD':'1234',
+#         'HOST':'localhost'
+# }}
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -150,7 +151,7 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     # Other settings...
 }

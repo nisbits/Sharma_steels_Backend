@@ -47,7 +47,8 @@ class ProductImage(models.Model):
 class ExtraCharge(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="extra_charges")
     name = models.CharField(max_length=255)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount_known = models.BooleanField(default=False)
+    amount = models.DecimalField(max_digits=10, decimal_places=2,blank=True,null=True)
 
     def __str__(self):
-        return self.name
+        return  f"{self.Product.specification} - {self.name}"

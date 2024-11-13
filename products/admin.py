@@ -7,4 +7,5 @@ admin.site.site_header = "Sharma_steels"
 admin.site.register(Product)
 admin.site.register(ProductImage)
 admin.site.register(category)
+admin.site.register(ExtraCharge)
 
