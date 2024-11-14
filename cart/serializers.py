@@ -2,11 +2,12 @@ from rest_framework import serializers
 from .models import CartItem
 from products.models import ExtraCharge
 from .models import OrderSummaryItem, OrderSummary
-
+from products.serializers import ProductListingSerializer
 class CartItemSerializer(serializers.ModelSerializer):
+    product_details=ProductListingSerializer(source='product', read_only=True)
     class Meta:
         model = CartItem
-        fields = ['id', 'product', 'quantity', 'price', 'total_price']
+        fields = ['id', 'product_details', 'quantity', 'price', 'total_price']
 
 
 

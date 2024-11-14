@@ -89,14 +89,14 @@ WSGI_APPLICATION = "Sharma_steels.wsgi.application"
 #     }
 # }
 
-# DATABASES = {
-#    'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'Sharma_steels',
-#         'USER':'postgres',
-#         'PASSWORD':'1234',
-#         'HOST':'localhost'
-# }}
+DATABASES = {
+   'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Sharma_steels',
+        'USER':'postgres',
+        'PASSWORD':'1234',
+        'HOST':'localhost'
+}}
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
