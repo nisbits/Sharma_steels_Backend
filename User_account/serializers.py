@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import UserProfile  # Assuming you have a UserProfile model for phone_number
+from .models import UserProfile , Address # Assuming you have a UserProfile model for phone_number
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -29,3 +29,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
         else:
             UserProfile.objects.create(user=user, phone_number=phone_number, user_catagory=user_catagory)
         return user
+
+
+
+from rest_framework import serializers
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ['id', 'receiver_name', 'receiver_phone_number', 'address_line_1', 'address_line_2', 'landmark', 'city', 'state', 'zip_code', 'country', 'is_default']

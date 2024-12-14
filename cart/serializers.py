@@ -11,6 +11,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 
 
+
 from rest_framework import serializers
 
 class ExtraChargeBreakdownSerializer(serializers.ModelSerializer):
@@ -45,9 +46,10 @@ class OrderSummaryItemSerializer(serializers.ModelSerializer):
     
     base_price = serializers.SerializerMethodField()
     extra_charges_breakdown = serializers.SerializerMethodField()
+    product_details=ProductListingSerializer(source='product', read_only=True)
     class Meta:
         model = OrderSummaryItem
-        fields = ('product', 'quantity', 'price' ,'base_price', 'extra_charges_breakdown', 'total_price')
+        fields = ('product_details', 'quantity', 'price' ,'base_price', 'extra_charges_breakdown', 'total_price')
     def get_extra_charges_breakdown(self, obj):
         # Pass the current OrderSummaryItem instance in context to ExtraChargeBreakdownSerializer
         return ExtraChargeBreakdownSerializer(obj.extra_charges, many=True, context={'order_summary_item': obj}).data

@@ -20,7 +20,7 @@ def send_otp(request):
         return Response({'message': 'User with this Phone number already exists'},status=status.HTTP_409_CONFLICT)
     
     response = send_sms(phone_no)
-    print(response.status_code)
+    print("response from 2factor: ",response.status_code)
     response = response.json()
     if response['Status'] == 'Success':
         return Response({'message': 'OTP sent successfully'},status=status.HTTP_200_OK)
@@ -97,3 +97,54 @@ def login_view(request):
 
     else:
         return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+    
+
+
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Address
+from .serializers import AddressSerializer
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+
+@api_view(['GET', 'POST'])
+def manage_addresses(request):
+    if request.method == 'GET':
+        # List all addresses for the logged-in user
+        addresses = Address.objects.filter(user=request.user)
+        serializer = AddressSerializer(addresses, many=True)
+        return Response({"user_Addresses":serializer.data})
+    
+    elif request.method == 'POST':
+        # Create a new address
+        serializer = AddressSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response({"user_Addresses":serializer.data}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+def delete_address(request, address_id):
+    # Delete an address by ID
+    address = get_object_or_404(Address, id=address_id, user=request.user)
+    address.delete()
+    return Response({"message": "Address deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST'])
+def set_default_address(request, address_id):
+    # Set a specific address as the default
+    address = get_object_or_404(Address, id=address_id, user=request.user)
+    
+    # Unset previous default address, if any
+    Address.objects.filter(user=request.user, is_default=True).update(is_default=False)
+    
+    # Set the new default address
+    address.is_default = True
+    address.save()
+    
+    return Response({"message": "Default address set successfully"}, status=status.HTTP_200_OK)

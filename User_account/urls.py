@@ -10,6 +10,9 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('login/', login_view, name='login'),
+    path('addresses/', manage_addresses, name='manage_addresses'),  # List and add addresses
+    path('addresses/delete/<int:address_id>/', delete_address, name='delete_address'),  # Delete address
+    path('addresses/set-default/<int:address_id>/', set_default_address, name='set_default_address'),  # Set default address
 ]
 
 

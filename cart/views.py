@@ -173,3 +173,46 @@ def create_order_summary(request):
         context={'quantity': cart_item.quantity}
     )
     return Response(order_summary_serializer.data, status=status.HTTP_201_CREATED)
+
+
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Product, OrderSummary, OrderSummaryItem, ExtraCharge
+from .serializers import OrderSummarySerializer
+
+@api_view(['POST'])
+def buy_now(request):
+    user = request.user
+    product_id = request.data.get("product_id")
+    quantity = request.data.get("quantity", 1)
+
+    try:
+        product = Product.objects.get(product_id=product_id)
+    except Product.DoesNotExist:
+        return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    # Create a new OrderSummary
+    order_summary = OrderSummary.objects.create(user=user)
+
+    # Create OrderSummaryItem
+    order_summary_item = OrderSummaryItem.objects.create(
+        order_summary=order_summary,
+        product=product,
+        quantity=quantity,
+        price=product.selling_price  # Assuming `selling_price` is the effective price
+    )
+
+    # Add extra charges
+    extra_charges = ExtraCharge.objects.filter(Product=product)
+    order_summary_item.extra_charges.set(extra_charges)
+    order_summary_item.calculate_total_price()
+
+    # Calculate the total price of the order summary
+    order_summary.calculate_total_price()
+
+    # Serialize and return the order summary data
+    order_summary_serializer = OrderSummarySerializer(order_summary)
+    return Response(order_summary_serializer.data, status=status.HTTP_201_CREATED)
