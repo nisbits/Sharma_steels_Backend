@@ -25,6 +25,12 @@ class Address(models.Model):
     zip_code = models.CharField(max_length=10)
     country = models.CharField(max_length=50, default="India")
     is_default = models.BooleanField(default=False)
-
+    
+    def save(self, *args, **kwargs):
+        # Check if the user already has any addresses
+        if not Address.objects.filter(user=self.user).exists():
+            # If no addresses exist, set this address as default
+            self.is_default = True
+        super().save(*args, **kwargs)  # Call the parent class save method
     def __str__(self):
         return f"{self.receiver_name} - {self.address_line_1}, {self.city}, {self.state}, {self.country}"

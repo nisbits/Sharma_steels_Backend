@@ -24,13 +24,16 @@ class CartItem(models.Model):
             self.total_price = self.price * self.quantity
         super().save(*args, **kwargs)
 
-
+# q: What is the purpose of the OrderSummary model?
+# a: The OrderSummary model is used to store the summary of an order, including the total price and the user who placed the order. It acts as a record of the order details for reference and tracking purposes.
+from User_account.models import Address
 
 class OrderSummary(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
+    address = models.ForeignKey(Address, on_delete=models.SET_NULL, blank=True, null=True)
+    is_confirmed = models.BooleanField(default=False) # logic is pending in views
     def calculate_total_price(self):
         # Calculate the sum of total prices for each item in the order summary
         total = sum(item.total_price for item in self.items.all())
@@ -58,3 +61,5 @@ class OrderSummaryItem(models.Model):
                 self.total_price += charge.amount * self.quantity
 
         self.save()
+
+# create a func to add two models to the cart   

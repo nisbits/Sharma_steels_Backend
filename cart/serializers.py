@@ -62,4 +62,4 @@ class OrderSummarySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderSummary
-        fields = ('user', 'created_at', 'total_price', 'items')
+        fields = ('id','user', 'created_at', 'total_price', 'items', 'address')

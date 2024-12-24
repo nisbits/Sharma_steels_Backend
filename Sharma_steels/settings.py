@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "rest_framework_simplejwt",
+    # "payments",
+    "order",
     
 ]
 
@@ -157,3 +159,5 @@ SIMPLE_JWT = {
     # Other settings...
 }
 
+RAZORPAY_KEY_ID = "rzp_test_b3SZzRTA6KVrhz"
+RAZORPAY_KEY_SECRET = "F8uhQm1QEgzNx731NKP8WhDo"

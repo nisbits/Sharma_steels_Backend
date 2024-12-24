@@ -138,17 +138,23 @@ from rest_framework import status
 from .models import CartItem, OrderSummary, OrderSummaryItem, ExtraCharge
 from .serializers import OrderSummarySerializer
 
-
+from User_account.models import Address
 @api_view(['POST'])
 def create_order_summary(request):
     user = request.user  # Get the logged-in user
     cart_items = CartItem.objects.filter(cart__user=user)  # Fetch the user's cart items
+    address_id = request.data.get('address_id')
 
+    try:
+         address_obj = Address.objects.get(id=address_id)
+    except Address.DoesNotExist:
+        return Response({"error": "Address not found"}, status=status.HTTP_404_NOT_FOUND)
+    # Check if the cart is empty
     if not cart_items.exists():
         return Response({"error": "No items in the cart"}, status=status.HTTP_400_BAD_REQUEST)
 
     # Create Order Summary
-    order_summary = OrderSummary.objects.create(user=user)
+    order_summary = OrderSummary.objects.create(user=user, address=address_obj)
 
     for cart_item in cart_items:
         # Create OrderSummaryItem for each cart item
@@ -157,6 +163,7 @@ def create_order_summary(request):
             product=cart_item.product,
             quantity=cart_item.quantity,
             price=cart_item.product.mrp
+
         )
 
         # Associate all extra charges for this item
@@ -188,14 +195,21 @@ def buy_now(request):
     user = request.user
     product_id = request.data.get("product_id")
     quantity = request.data.get("quantity", 1)
+    
+    address_id = request.data.get('address_id')
 
+    try:
+         address_obj = Address.objects.get(id=address_id)
+    except Address.DoesNotExist:
+        return Response({"error": "Address not found"}, status=status.HTTP_404_NOT_FOUND)
+    
     try:
         product = Product.objects.get(product_id=product_id)
     except Product.DoesNotExist:
         return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
 
     # Create a new OrderSummary
-    order_summary = OrderSummary.objects.create(user=user)
+    order_summary = OrderSummary.objects.create(user=user, address=address_obj)
 
     # Create OrderSummaryItem
     order_summary_item = OrderSummaryItem.objects.create(

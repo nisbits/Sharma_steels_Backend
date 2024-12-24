@@ -148,3 +148,11 @@ def set_default_address(request, address_id):
     address.save()
     
     return Response({"message": "Default address set successfully"}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_default_address(request):
+    # Get the default address for the logged-in user
+    address = get_object_or_404(Address, user=request.user, is_default=True)
+    serializer = AddressSerializer(address)
+    return Response(serializer.data)
