@@ -6,7 +6,7 @@ from .models import OrderSummary, Order, OrderAddresses
 from django.conf import settings
 
 import razorpay
-
+from payments.models import Payment
 # Initialize Razorpay client (set your keys)
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
@@ -70,18 +70,35 @@ def create_order(request):
             # Save Razorpay order ID in the database
             order.razorpay_tracking_id = razorpay_order["id"]
             order.save()
-
+            
+            payment = Payment.objects.create(
+                user=request.user,
+                order=order,
+                razorpay_order_id=razorpay_order["id"],
+                amount=order.total_price,
+                payment_mode="online",
+                status="created"
+            )
             # Return Razorpay order details
             return Response({
                 "message": "Order created successfully.",
                 "order_id": order.id,
-                "razorpay_order_id": razorpay_order["id"],
-                "amount": razorpay_order["amount"],
-                "currency": razorpay_order["currency"],
+                "razorpay_order_id": razorpay_order["id"], # required for payment form
+                "amount": razorpay_order["amount"], # required for payment form
+                "currency": razorpay_order["currency"], # required for payment form
+                "RAZORPAY_KEY_ID": settings.RAZORPAY_KEY_ID,  # required for payment form
             }, status=status.HTTP_201_CREATED)
 
         elif payment_method == "cod":
             # Directly confirm the order with COD
+            payment = Payment.objects.create(
+                user=request.user,
+                order=order,
+                amount=order.total_price,
+                payment_mode="cod",
+                status="created"  # COD payments are marked created until delivery
+            )
+            
             return Response({
                 "message": "Order created successfully (COD).",
                 "order_id": order.id,
@@ -92,3 +109,5 @@ def create_order(request):
 
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+

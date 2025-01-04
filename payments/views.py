@@ -73,3 +73,49 @@
 #             return JsonResponse({"status": "failure", "error": str(e)})
 
 
+import razorpay
+from django.conf import settings
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Payment
+from order.models import Order
+
+# Initialize Razorpay client
+razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+@api_view(['POST'])
+def verify_payment(request):
+    try:
+        # Extract data from request
+        razorpay_payment_id = request.data.get("razorpay_payment_id")
+        razorpay_order_id = request.data.get("razorpay_order_id")
+        razorpay_signature = request.data.get("razorpay_signature")
+
+        # Verify the payment signature
+        params_dict = {
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_payment_id': razorpay_payment_id,
+            'razorpay_signature': razorpay_signature
+        }
+        try:
+            razorpay_client.utility.verify_payment_signature(params_dict)
+        except razorpay.errors.SignatureVerificationError:
+            return Response({"error": "Invalid payment signature."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Fetch the related order
+        order = Order.objects.get(razorpay_tracking_id=razorpay_order_id)
+        payment = Payment.objects.get(order=order, razorpay_order_id=razorpay_order_id, user=request.user)
+        payment.razorpay_payment_id = razorpay_payment_id
+        payment.razorpay_signature = razorpay_signature
+        payment.status = "successful"
+        # Save payment details in the database
+        payment.save()
+
+        # Update order status
+        # order.status = "successful"
+        # order.save()
+
+        return Response({"success": "Payment verified and saved successfully."}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
