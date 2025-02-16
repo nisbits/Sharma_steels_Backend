@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "payments",
     "order",
+    "legal",
+    "contactus",
     
 ]
 
@@ -92,13 +94,21 @@ WSGI_APPLICATION = "Sharma_steels.wsgi.application"
 #     }
 # }
 
+# DATABASES = {
+#    'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'Sharma_steels',
+#         'USER':'postgres',
+#         'PASSWORD':'1234',
+#         'HOST':'localhost'
+# }}
 DATABASES = {
    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'Sharma_steels',
         'USER':'postgres',
-        'PASSWORD':'1234',
-        'HOST':'localhost'
+        'PASSWORD':'mcomnpn',
+        'HOST':'103.242.225.195'
 }}
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

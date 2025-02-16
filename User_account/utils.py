@@ -1,6 +1,7 @@
 import requests
 import os 
-api_key =os.environ.get('2factor_API_key')
+# api_key =os.environ.get('2factor_API_key')
+api_key ="59ea4a40-7bbf-11ef-8b17-0200cd936042"
 
 def send_sms(phone_number): 
     print(api_key)
