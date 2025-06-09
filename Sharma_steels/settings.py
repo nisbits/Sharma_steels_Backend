@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-
+CSRF_TRUSTED_ORIGINS = ["https://sharmasteel.in", "https://www.sharmasteel.in"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -97,7 +97,7 @@ WSGI_APPLICATION = "Sharma_steels.wsgi.application"
 # DATABASES = {
 #    'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'Sharma_steels',
+#         'NAME': 'sharmasteels_local',
 #         'USER':'postgres',
 #         'PASSWORD':'1234',
 #         'HOST':'localhost'
@@ -108,7 +108,9 @@ DATABASES = {
         'NAME': 'sharmasteels',
         'USER':'nishant',
         'PASSWORD':'nishantverma',
-        'HOST':'13.60.183.26'
+        # 'HOST':'13.60.183.26'
+        'HOST':'localhost',
+        'PORT': '5432',
 }}
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -172,3 +174,7 @@ SIMPLE_JWT = {
 
 RAZORPAY_KEY_ID = "rzp_test_b3SZzRTA6KVrhz"
 RAZORPAY_KEY_SECRET = "F8uhQm1QEgzNx731NKP8WhDo"
+
+# RAZORPAY_KEY_ID = "rzp_live_9dGFhJY5LvgS2F"
+# RAZORPAY_KEY_SECRET = "7uNL2u1eKfuBra8yjJqrGeH9"
+

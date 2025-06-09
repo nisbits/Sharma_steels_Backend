@@ -12,7 +12,7 @@ razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZOR
 
 @api_view(['POST'])
 def create_order(request):
-    try:
+    # try:
         # Retrieve data from request
         order_summary_id = request.data.get("order_summary_id")
         payment_method = request.data.get("payment_method")  # "online" or "cod"
@@ -107,7 +107,7 @@ def create_order(request):
         else:
             return Response({"error": "Invalid payment method."}, status=status.HTTP_400_BAD_REQUEST)
 
-    except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    # except Exception as e:
+    #     return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

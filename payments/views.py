@@ -113,8 +113,8 @@ def verify_payment(request):
         payment.save()
 
         # Update order status
-        # order.status = "successful"
-        # order.save()
+        order.payment_status = True
+        order.save()
 
         return Response({"success": "Payment verified and saved successfully."}, status=status.HTTP_200_OK)
     except Exception as e:

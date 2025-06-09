@@ -15,7 +15,7 @@ class CartItem(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     added_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return f"{self.product.product_name} - {self.quantity}"
+        return f"{self.product.specification} - {self.quantity}"
     def save(self, *args, **kwargs):
         # Calculate total price based on quantity and price
         if self.price is None:
@@ -50,7 +50,9 @@ class OrderSummaryItem(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Base price per item
     extra_charges = models.ManyToManyField(ExtraCharge, blank=True, related_name="order_items")  # Multiple extra charges
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # Total price including charges
-
+    
+    def __str__(self):
+        return f"{self.product.specification} - {self.quantity} pcs"
     def calculate_total_price(self):
         # Base price calculation
         self.total_price = self.price * self.quantity
