@@ -102,6 +102,8 @@ WSGI_APPLICATION = "Sharma_steels.wsgi.application"
 #         'PASSWORD':'1234',
 #         'HOST':'localhost'
 # }}
+
+# Bellow code is for production database, uncomment it when you want to use it
 DATABASES = {
    'default': {
         'ENGINE': 'django.db.backends.postgresql',
