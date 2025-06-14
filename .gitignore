@@ -5,3 +5,6 @@ media/
 
 # Keep __init__.py to ensure Django still detects the package
 !**/migrations/__init__.py
+
+# Ignore only __pycache__ inside migrations folders
+**/migrations/__pycache__/
