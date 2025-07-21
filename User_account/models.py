@@ -9,6 +9,7 @@ class UserProfile(models.Model):
     user_catagory = models.CharField(max_length=25)
     admin_approved = models.BooleanField(default=True)
     contractor_code = models.CharField(max_length=10, blank=True, null=True, unique=True)
+    testing_field = models.CharField(max_length=100, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         # Generate contractor code only for contractor users and only if not already set
