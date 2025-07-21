@@ -28,6 +28,7 @@ urlpatterns = [
     path("order/", include("order.urls")),
     path("legal/", include("legal.urls")),
     path("contactus/", include("contactus.urls")),
+    path("point-system/", include("point_system.urls")),  # Include point system URLs
 ]
 
 

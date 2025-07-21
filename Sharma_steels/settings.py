@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "order",
     "legal",
     "contactus",
+    "point_system",
     
 ]
 
@@ -94,26 +95,26 @@ WSGI_APPLICATION = "Sharma_steels.wsgi.application"
 #     }
 # }
 
-# DATABASES = {
-#    'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'sharmasteels_local',
-#         'USER':'postgres',
-#         'PASSWORD':'1234',
-#         'HOST':'localhost'
-# }}
-
-# Bellow code is for production database, uncomment it when you want to use it
 DATABASES = {
    'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sharmasteels',
-        'USER':'nishant',
-        'PASSWORD':'nishantverma',
-        # 'HOST':'13.60.183.26'
-        'HOST':'localhost',
-        'PORT': '5432',
+        'NAME': 'sharmasteels_local',
+        'USER':'postgres',
+        'PASSWORD':'1234',
+        'HOST':'localhost'
 }}
+
+# Bellow code is for production database, uncomment it when you want to use it
+# DATABASES = {
+#    'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'sharmasteels',
+#         'USER':'nishant',
+#         'PASSWORD':'nishantverma',
+#         # 'HOST':'13.60.183.26'
+#         'HOST':'localhost',
+#         'PORT': '5432',
+# }}
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
