@@ -38,3 +38,21 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ['id', 'receiver_name', 'receiver_phone_number', 'address_line_1', 'address_line_2', 'landmark', 'city', 'state', 'zip_code', 'country', 'is_default']
+
+
+
+from rest_framework import serializers
+from django.contrib.auth.models import User
+from .models import UserProfile
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']  # add more if needed
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)  # Nested user details
+
+    class Meta:
+        model = UserProfile
+        fields = ['user', 'phone_number', 'user_catagory', 'admin_approved', 'contractor_code']

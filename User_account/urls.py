@@ -13,6 +13,7 @@ urlpatterns = [
     path('addresses/', manage_addresses, name='manage_addresses'),  # List and add addresses
     path('addresses/delete/<int:address_id>/', delete_address, name='delete_address'),  # Delete address
     path('addresses/set-default/<int:address_id>/', set_default_address, name='set_default_address'),  # Set default address
+    path('mydetails/', get_current_user_details, name='current-user-details'),
 ]
 
 

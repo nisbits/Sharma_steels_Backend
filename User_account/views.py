@@ -156,3 +156,15 @@ def get_default_address(request):
     address = get_object_or_404(Address, user=request.user, is_default=True)
     serializer = AddressSerializer(address)
     return Response(serializer.data)
+
+from .serializers import UserProfileSerializer
+
+@api_view(['GET'])
+def get_current_user_details(request):
+    try:
+        profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        return Response({"error": "Profile not found"}, status=404)
+    
+    serializer = UserProfileSerializer(profile)
+    return Response(serializer.data)
