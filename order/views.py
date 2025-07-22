@@ -7,6 +7,7 @@ from django.conf import settings
 
 import razorpay
 from payments.models import Payment
+from .serializers import OrderSerializer
 # Initialize Razorpay client (set your keys)
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
@@ -111,3 +112,11 @@ def create_order(request):
     #     return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@api_view(['GET'])
+def get_user_orders(request):
+    user = request.user  # current logged-in user
+    orders = Order.objects.filter(user=user)
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
+     
+     
